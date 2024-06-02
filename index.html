@@ -25,8 +25,9 @@ const webhookUrl = getUrlParameter('webhook'); // Get webhook URL from query par
 function getUrlParameter(name) {
 	const urlParams = new URLSearchParams(window.location.search);
 	return urlParams.get(name);
-}
+} // Get paramaters from url
 
+// Clears html Form
 function clearForm(){
 	// Access the form element
 	var form = document.getElementById("pollForm");
@@ -43,11 +44,28 @@ function clearForm(){
 	}
 }
 
-function startPoll(){
+// Check that the webhook parameter has been included
+function checkWebhook(){
     if (!webhookUrl) {
         console.error("Webhook URL is missing.");
         return;
     } // Error if no webhook was included in the url
+}
+
+// Send json data to bot
+function sendData(jsonData){
+    fetch(webhookUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(jsonData),
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
+}
+
+function startPoll(){
+    checkWebhook();
 
     // Access the form element
     var form = document.getElementById("pollForm");
@@ -82,56 +100,25 @@ function startPoll(){
     };
 
     // Send data to bot
-    fetch(webhookUrl, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(jsonData),
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
+    sendData(jsonData);
 }
 
 function endPoll(){
-     if (!webhookUrl) {
-        console.error("Webhook URL is missing.");
-        return;
-    } // Error if no webhook was included in the url
+     checkWebhook();
 
-    var jsonData = {
-        endPoll: true,
-    };
+    var jsonData = { endPoll: true, };
 
     // Send data to bot
-    fetch(webhookUrl, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(jsonData),
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
+    sendData(jsonData);
 }
 
 function hideOverlay(){
-     if (!webhookUrl) {
-        console.error("Webhook URL is missing.");
-        return;
-    } // Error if no webhook was included in the url
+    checkWebhook();
 
-    var jsonData = {
-        hidePoll: true,
-    };
+    var jsonData = { hidePoll: true, };
 
     // Send data to bot
-    fetch(webhookUrl, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(jsonData),
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
+    sendData(jsonData);
 }
 
 </script>

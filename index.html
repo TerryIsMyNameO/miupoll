@@ -8,33 +8,55 @@
 <button onclick="startPoll()">Start Poll</button>
 
 <script>
-const webhookUrl = getUrlParameter('webhook'); // Get webhook URL from query parameter
-
-var title = "Test poll";
-var option = ["first", "second", "third"];
-
-const jsonData = {
-	key1: title || '',
-	key2: option[0] || '',
-	key3: option[1] || '',
-	key4: option[2] || null // Set default value for optional keys
-};
-
-
 function getUrlParameter(name) {
 	const urlParams = new URLSearchParams(window.location.search);
 	return urlParams.get(name);
 }
 
-function startPoll(){
+const webhookUrl = getUrlParameter('webhook'); // Get webhook URL from query parameter
+
+const title = "Test poll";
+const options = ["first", "second", "third"]; // Corrected spelling mistake
+
+const jsonData = {
+	key1: title || '',
+	key2: options[0] || '',
+	key3: options[1] || '',
+	key4: options[2] || null, // Set default value for optional keys
+};
+
+function startPoll() {
 	if (!webhookUrl) {
-        console.error("Webhook URL is missing.");
-        return;
-    } // Error if no webhook was included in the url
-	fetch(webhookUrl, {method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify(jsonData),})
-	.then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
+		console.error("Webhook URL is missing.");
+		return;
+	} // Error if no webhook was included in the URL
+
+	console.log('Sending JSON data:', JSON.stringify(jsonData)); // Log the JSON data being sent
+
+	fetch(webhookUrl, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(jsonData),
+	})
+	.then(response => {
+		console.log('Response status:', response.status); // Log the response status
+		console.log('Response status text:', response.statusText); // Log the response status text
+		return response.text(); // Get raw response text
+	})
+	.then(text => {
+		console.log('Raw response text:', text); // Log the raw response text
+		if (text) {
+			try {
+				const data = JSON.parse(text); // Attempt to parse the response text as JSON
+				console.log('Parsed JSON data:', data); // Log the parsed JSON data
+			} catch (error) {
+				console.error('Failed to parse JSON:', error); // Log JSON parsing error
+			}
+		} else {
+			console.log('No response text to parse');
+		}
+	})
+	.catch(error => console.error('Fetch error:', error)); // Log any fetch errors
 }
 </script>
 

@@ -5,21 +5,21 @@
 </head>
 <body>
 
-<button onclick="startPoll()">Start Poll</button>
+	<form id="pollForm">
+	  <label for="Title">Poll Title:</label><br>
+	  <input type="text" id="Title" name="Title"><br>
+	  <label for="Option1">Option:</label><br>
+	  <input type="text" id="Option1" name="Option1"><br>
+	  <label for="Option2">Option:</label><br>
+	  <input type="text" id="Option2" name="Option2"><br>
+	  <label for="Option3">Option:</label><br>
+	  <input type="text" id="Option3" name="Option3"><br>
+	</form>
+
+	<button onclick="startPoll()">Start Poll</button>
 
 <script>
 const webhookUrl = getUrlParameter('webhook'); // Get webhook URL from query parameter
-
-var title = "Test Poll";
-var option = ["first", "second", ""];
-
-const jsonData = {
-	title: title || '',
-	option1: option[0] || '',
-	option2: option[1] || '',
-	option3: option[2] || null, // Set default value for optional keys
-};
-
 
 function getUrlParameter(name) {
 	const urlParams = new URLSearchParams(window.location.search);
@@ -31,6 +31,22 @@ function startPoll(){
         console.error("Webhook URL is missing.");
         return;
     } // Error if no webhook was included in the url
+
+    // Access the form element
+  	var form = document.getElementById("pollForm");
+
+    // Get poll options from form
+    var title = form.elements["Title"].value;
+	var option = [form.elements["Option1"].value, form.elements["Option2"].value, form.elements["Option3"].value];
+
+	// Format poll options as json
+	var jsonData = {
+		title: title || '',
+		option1: option[0] || '',
+		option2: option[1] || '',
+		option3: option[2] || null, // Set default value for optional keys
+	};
+
 	fetch(webhookUrl, {method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify(jsonData),})
 	.then(response => response.json())
     .then(data => console.log(data))

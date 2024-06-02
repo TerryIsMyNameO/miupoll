@@ -99,7 +99,7 @@ function endPoll(){
     } // Error if no webhook was included in the url
 
     var jsonData = {
-        end: true || '',
+        endPoll: true,
     };
 
     // Send data to bot
@@ -120,7 +120,7 @@ function hideOverlay(){
     } // Error if no webhook was included in the url
 
     var jsonData = {
-        hide: true || '',
+        hidePoll: true,
     };
 
     // Send data to bot

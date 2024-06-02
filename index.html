@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Create Poll</title>
+</head>
+<body>
+
+<button onclick="startPoll()">Start Poll</button>
+
+<script>
+const webhookUrl = getUrlParameter('webhook'); // Get webhook URL from query parameter
+
+var title = "Test poll";
+var option = ["first", "second", "third"];
+
+const jsonData = {
+	key1: title || '',
+	key2: option[0] || '',
+	key3: option[1] || '',
+	key4: option[2] || null, // Set default value for optional keys
+};
+
+
+function getUrlParameter(name) {
+	const urlParams = new URLSearchParams(window.location.search);
+	return urlParams.get(name);
+}
+
+function startPoll(){
+	if (!webhookUrl) {
+        console.error("Webhook URL is missing.");
+        return;
+    } // Error if no webhook was included in the url
+	fetch(webhookUrl, {method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify(jsonData),})
+	.then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
+}
+</script>
+
+</body>
+</html>

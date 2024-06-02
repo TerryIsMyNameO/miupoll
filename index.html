@@ -93,9 +93,9 @@ function startPoll(){
     // Format poll options as JSON
     var jsonData = {
         title: title || '',
+        numPollOptions: options.length,
         option1: options[0] || '',
         option2: options[1] || '',
-        extraOpts: options.length -2 || 0,
         option3: options[2] || null, // Include null if option3 is empty
     };
 

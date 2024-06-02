@@ -17,7 +17,7 @@
 	  <div id="error-message" style="color: red; display: none;">Please fill in all required fields.</div> <!-- Error message placeholder -->
 	</form>
 
-	<button onclick="startPoll()">Start Poll</button>
+	<button onclick="startPoll()">Start Poll</button><button onclick="endPoll()">End Poll</button>
 
 <script>
 const webhookUrl = getUrlParameter('webhook'); // Get webhook URL from query parameter
@@ -93,6 +93,17 @@ function startPoll(){
 
     // Clear form after submission
     //clearForm();
+}
+
+function endPoll(){
+     if (!webhookUrl) {
+        console.error("Webhook URL is missing.");
+        return;
+    } // Error if no webhook was included in the url
+
+    var jsonData = {
+        end: true || '',
+    };
 }
 
 </script>

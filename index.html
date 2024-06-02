@@ -6,14 +6,15 @@
 <body>
 
 	<form id="pollForm">
-	  <label for="Title">Poll Title:</label><br>
-	  <input type="text" id="Title" name="Title"><br>
-	  <label for="Option1">Option:</label><br>
-	  <input type="text" id="Option1" name="Option1"><br>
-	  <label for="Option2">Option:</label><br>
-	  <input type="text" id="Option2" name="Option2"><br>
-	  <label for="Option3">Option:</label><br>
+	  <label for="Title">Poll Title*</label><br>
+	  <input type="text" id="Title" name="Title" required><br>
+	  <label for="Option1">Option*</label><br>
+	  <input type="text" id="Option1" name="Option1" required><br>
+	  <label for="Option2">Option*</label><br>
+	  <input type="text" id="Option2" name="Option2" required><br>
+	  <label for="Option3">Option</label><br>
 	  <input type="text" id="Option3" name="Option3"><br>
+	  <div id="error-message" style="color: red; display: none;">Please fill in all required fields.</div> <!-- Error message placeholder -->
 	</form>
 
 	<button onclick="startPoll()">Start Poll</button>
@@ -26,32 +27,73 @@ function getUrlParameter(name) {
 	return urlParams.get(name);
 }
 
+function clearForm(){
+	// Access the form element
+	var form = document.getElementById("pollForm");
+
+	// Iterate through each input field in the form
+	for (var i = 0; i < form.elements.length; i++) {
+	  var element = form.elements[i];
+	  
+	  // Check if the element is an input field
+	  if (element.tagName === "INPUT") {
+	    // Clear the value of the input field
+	    element.value = "";
+	  }
+	}
+}
+
 function startPoll(){
-	if (!webhookUrl) {
+    if (!webhookUrl) {
         console.error("Webhook URL is missing.");
         return;
     } // Error if no webhook was included in the url
 
     // Access the form element
-  	var form = document.getElementById("pollForm");
+    var form = document.getElementById("pollForm");
 
     // Get poll options from form
     var title = form.elements["Title"].value;
-	var option = [form.elements["Option1"].value, form.elements["Option2"].value, form.elements["Option3"].value];
+    var options = [];
 
-	// Format poll options as json
-	var jsonData = {
-		title: title || '',
-		option1: option[0] || '',
-		option2: option[1] || '',
-		option3: option[2] || null, // Set default value for optional keys
-	};
+    // Push non-empty options into the options array
+    for (var i = 1; i <= 3; i++) {
+        var option = form.elements["Option" + i].value.trim();
+        if (option !== "") {
+            options.push(option);
+        }
+    }
 
-	fetch(webhookUrl, {method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify(jsonData),})
-	.then(response => response.json())
+    // Check if required fields are filled
+    if (title === "" || options.length < 2) {
+        // Display error message
+        var errorMessage = document.getElementById("error-message");
+        errorMessage.style.display = "block";
+        return; // Stop function execution if required fields are not filled
+    }
+
+    // Format poll options as JSON
+    var jsonData = {
+        title: title || '',
+        option1: options[0] || '',
+        option2: options[1] || '',
+        option3: options[2] || null, // Include null if option3 is empty
+    };
+
+    // Send data to bot
+    fetch(webhookUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(jsonData),
+    })
+    .then(response => response.json())
     .then(data => console.log(data))
     .catch(error => console.error('Error:', error)); // Error handling for the fetch request
+
+    // Clear form after submission
+    //clearForm();
 }
+
 </script>
 
 </body>

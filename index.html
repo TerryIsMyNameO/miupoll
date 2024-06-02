@@ -17,7 +17,7 @@
 	  <div id="error-message" style="color: red; display: none;">Please fill in all required fields.</div> <!-- Error message placeholder -->
 	</form>
 
-	<button onclick="startPoll()">Start Poll</button><button onclick="endPoll()">End Poll</button>
+	<button onclick="startPoll()">Start Poll</button><button onclick="endPoll()">End Poll</button><button onclick="hideOverlay()">Hide Overlay</button>
 
 <script>
 const webhookUrl = getUrlParameter('webhook'); // Get webhook URL from query parameter
@@ -90,9 +90,6 @@ function startPoll(){
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(error => console.error('Error:', error)); // Error handling for the fetch request
-
-    // Clear form after submission
-    //clearForm();
 }
 
 function endPoll(){
@@ -104,6 +101,37 @@ function endPoll(){
     var jsonData = {
         end: true || '',
     };
+
+    // Send data to bot
+    fetch(webhookUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(jsonData),
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
+}
+
+function hideOverlay(){
+     if (!webhookUrl) {
+        console.error("Webhook URL is missing.");
+        return;
+    } // Error if no webhook was included in the url
+
+    var jsonData = {
+        hide: true || '',
+    };
+
+    // Send data to bot
+    fetch(webhookUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(jsonData),
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
 }
 
 </script>

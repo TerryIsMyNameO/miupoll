@@ -111,7 +111,7 @@ function startPoll(){
     var options = [];
 
     // Push non-empty options into the options array
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= 10; i++) {
         var option = form.elements["Option" + i] ? form.elements["Option" + i].value.trim() : "";
         if (option !== "") {
             options.push(option);

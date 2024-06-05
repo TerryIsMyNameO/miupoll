@@ -6,168 +6,29 @@
 <body>
 
     <form id="pollForm">
-      <label for="Title">Poll Title*</label><br>
-      <input type="text" id="Title" name="Title" required><br>
-      <label for="Option1">Option*</label><br>
-      <input type="text" id="Option1" name="Option1" required><br>
-      <label for="Option2">Option*</label><br>
-      <input type="text" id="Option2" name="Option2" required><br>
+      <div id="titleContainer">
+          <label for="Title">Poll Title*</label><br>
+          <input type="text" id="Title" name="Title" required><br>
+      </div>
+      <div id="optionContainer1">
+          <label for="Option1">Option*</label><br>
+          <input type="text" id="Option1" name="Option1" required>
+      </div>
+      <div id="optionContainer2">
+          <label for="Option2">Option*</label><br>
+          <input type="text" id="Option2" name="Option2" required>
+      </div>
       <div id="extraOptions">
         <!-- Additional options will be added here -->
       </div>
-      <button type="button" id="addOptionBtn" onclick="addOption()">+ Add Option</button>
+      <button type="button" id="addOptionBtn" onclick="addOption()">+ Option</button>
       <button type="button" onclick="clearForm()">Clear All</button><br>
       <div id="error-message" style="color: red; display: none;">Please fill in all required fields.</div> <!-- Error message placeholder -->
     </form>
 
     <button onclick="startPoll()">Start Poll</button><button onclick="endPoll()">End Poll</button><button onclick="hideOverlay()">Hide Overlay</button>
 
-<script>
-const webhookUrl = getUrlParameter('webhook'); // Get webhook URL from query parameter
-
-function getUrlParameter(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-} // Get parameters from URL
-
-// Check that the webhook parameter has been included
-function checkWebhook(){
-    if (!webhookUrl) {
-        console.error("Webhook URL is missing.");
-        return;
-    } // Error if no webhook was included in the URL
-}
-
-// Send JSON data to bot
-function sendData(jsonData){
-    fetch(webhookUrl, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(jsonData),
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
-}
-
-// Function to add more option fields dynamically
-function addOption() {
-    var extraOptionsDiv = document.getElementById("extraOptions");
-    var currentOptionsCount = extraOptionsDiv.childElementCount / 3 + 2; // Get the number of options currently displayed
-
-    if (currentOptionsCount < 9) { // Maximum 10 options
-        var optionIndex = currentOptionsCount + 1; // Calculate the next option index
-        var newLabel = document.createElement("label");
-        newLabel.setAttribute("for", "Option" + optionIndex);
-        newLabel.textContent = "Option";
-
-        var newInput = document.createElement("input");
-        newInput.setAttribute("type", "text");
-        newInput.setAttribute("id", "Option" + optionIndex);
-        newInput.setAttribute("name", "Option" + optionIndex);
-
-        extraOptionsDiv.appendChild(newLabel);
-        extraOptionsDiv.appendChild(newInput);
-        extraOptionsDiv.appendChild(document.createElement("br"));
-
-         if (currentOptionsCount === 8) {
-            addOptionBtn.disabled = true;
-            addOptionBtn.style.backgroundColor = "gray";
-            addOptionBtn.style.cursor = "not-allowed";
-        } // Disable and gray out button when max number of options reached
-
-    } else {
-        // Show an alert indicating maximum options reached
-        // Shouldn't actually need this because the button should be disabled at this point
-        alert("You can add a maximum of 10 options.");
-    }
-}
-
-// Clears HTML form
-function clearForm(){
-    // Access the form element
-    var form = document.getElementById("pollForm");
-
-    // Iterate through each input field in the form
-    for (var i = 0; i < form.elements.length; i++) {
-      var element = form.elements[i];
-      
-      // Check if the element is an input field
-      if (element.tagName === "INPUT") {
-        // Clear the value of the input field
-        element.value = "";
-      }
-    }
-}
-
-// Begins a new poll
-function startPoll(){
-    checkWebhook();
-
-    // Access the form element
-    var form = document.getElementById("pollForm");
-
-    // Get poll options from form
-    var title = form.elements["Title"].value;
-    var options = [];
-
-    // Push non-empty options into the options array
-    for (var i = 1; i <= 9; i++) {
-        var option = form.elements["Option" + i] ? form.elements["Option" + i].value.trim() : "";
-        if (option !== "") {
-            options.push(option);
-        }
-    }
-
-    // Check if required fields are filled
-    if (title === "" || options.length < 2) {
-        // Display error message
-        var errorMessage = document.getElementById("error-message");
-        errorMessage.style.display = "block";
-        return; // Stop function execution if required fields are not filled
-    } else {
-        var errorMessage = document.getElementById("error-message");
-        errorMessage.style.display = "none";
-    }
-
-    // Format poll options as JSON
-    var jsonData = {
-        title: title || '',
-        numPollOptions: options.length,
-        option1: options[0] || '',
-        option2: options[1] || '',
-        option3: options[2] || null, // Include null if option is empty
-        option4: options[3] || null,
-        option5: options[4] || null,
-        option6: options[5] || null,
-        option7: options[6] || null,
-        option8: options[7] || null,
-        option9: options[8] || null,
-    };
-
-    // Send data to bot
-    sendData(jsonData);
-}
-
-function endPoll(){
-     checkWebhook();
-
-    var jsonData = { endPoll: true, };
-
-    // Send data to bot
-    sendData(jsonData);
-}
-
-function hideOverlay(){
-    checkWebhook();
-
-    var jsonData = { hidePoll: true, };
-
-    // Send data to bot
-    sendData(jsonData);
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>

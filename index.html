@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Create Poll</title>
+  <title>Create Poll</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+  <div id="wrapper">
     <form id="pollForm">
       <div id="titleContainer">
-          <label for="Title">Poll Title*</label><br>
-          <input type="text" id="Title" name="Title" required><br>
+          <label for="Title">Poll Title<span class="required">*</span></label>
+          <input type="text" id="Title" name="Title" required>
       </div>
-      <div id="optionContainer1">
-          <label for="Option1">Option*</label><br>
+      <div id="optionContainer1" class="optionContainer">
+          <label for="Option1">Option<span class="required">*</span></label>
           <input type="text" id="Option1" name="Option1" required>
       </div>
-      <div id="optionContainer2">
-          <label for="Option2">Option*</label><br>
+      <div id="optionContainer2" class="optionContainer">
+          <label for="Option2">Option<span class="required">*</span></label>
           <input type="text" id="Option2" name="Option2" required>
       </div>
       <div id="extraOptions">
         <!-- Additional options will be added here -->
       </div>
+      <div id="error-message" style="display: none;">Please fill in all required fields.</div> 
       <button type="button" id="addOptionBtn" onclick="addOption()">+ Option</button>
-      <button type="button" onclick="clearForm()">Clear All</button><br>
-      <div id="error-message" style="color: red; display: none;">Please fill in all required fields.</div> <!-- Error message placeholder -->
+      <button type="button" onclick="clearForm()">Clear All</button>
     </form>
 
-    <button onclick="startPoll()">Start Poll</button><button onclick="endPoll()">End Poll</button><button onclick="hideOverlay()">Hide Overlay</button>
-
+    <button id="startButton" onclick="startPoll()">Start Poll</button>
+    <button id="endButton" onclick="endPoll()">End Poll</button>
+    <button id="hideButton" onclick="hideOverlay()">Hide Overlay</button>
+  </div>
 <script src="script.js"></script>
 
 </body>

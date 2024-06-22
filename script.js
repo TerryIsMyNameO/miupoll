@@ -76,35 +76,23 @@ function addOption() {
         // create a container div for the new option
         let optionContainer = document.createElement("div");
         optionContainer.setAttribute("id", "optionContainer" + optionNumber);
-        optionContainer.setAttribute("class", "optionContainer");
+        optionContainer.setAttribute("class", "optionContainer flexOption");
         
-        // create the label html object for the new option
-        let newLabel = document.createElement("label");
-        newLabel.setAttribute("for", "Option" + optionNumber);
-        newLabel.textContent = "Option";
-
-        // create flex div for input and button
-        let flexOption = document.createElement("div");
-        flexOption.setAttribute("class", "flexOption");
-
         // create the input box for the new option
         let newInput = document.createElement("input");
         newInput.setAttribute("type", "text");
         newInput.setAttribute("id", "Option" + optionNumber);
         newInput.setAttribute("name", "Option" + optionNumber);
+        newInput.setAttribute("placeholder", "Option");
 
         // create the remove button for the new option
         let removeButton = document.createElement("button");
         removeButton.textContent = "Remove";
         removeButton.onclick = function() { removeOption(optionNumber); };
 
-        // append input box and remove button to flex div
-        flexOption.appendChild(newInput);
-        flexOption.appendChild(removeButton);
-
-        // append the new label and flex div to container
-        optionContainer.appendChild(newLabel);
-        optionContainer.appendChild(flexOption);
+        // append input box and remove button to container div
+        optionContainer.appendChild(newInput);
+        optionContainer.appendChild(removeButton);
 
         // append the container div to the extraOptionsDiv
         extraOptionsDiv.appendChild(optionContainer);

@@ -46,7 +46,7 @@ function removeOption(optionNumber){
         }
 
         // Update IDs and data-option attributes of remaining options
-        for (var i = optionNumber + 1; i <= optionCount + 1; i++) {
+        for (let i = optionNumber + 1; i <= optionCount + 1; i++) {
             var optionContainer = document.getElementById("optionContainer" + i);
             if (optionContainer) {
                 optionContainer.setAttribute("id", "optionContainer" + (i - 1));
@@ -74,29 +74,37 @@ function addOption() {
         let optionNumber = optionCount + 1; // Calculate the next option number
 
         // create a container div for the new option
-        var optionContainer = document.createElement("div");
+        let optionContainer = document.createElement("div");
         optionContainer.setAttribute("id", "optionContainer" + optionNumber);
+        optionContainer.setAttribute("class", "optionContainer");
         
         // create the label html object for the new option
-        var newLabel = document.createElement("label");
+        let newLabel = document.createElement("label");
         newLabel.setAttribute("for", "Option" + optionNumber);
         newLabel.textContent = "Option";
 
+        // create flex div for input and button
+        let flexOption = document.createElement("div");
+        flexOption.setAttribute("class", "flexOption");
+
         // create the input box for the new option
-        var newInput = document.createElement("input");
+        let newInput = document.createElement("input");
         newInput.setAttribute("type", "text");
         newInput.setAttribute("id", "Option" + optionNumber);
         newInput.setAttribute("name", "Option" + optionNumber);
 
         // create the remove button for the new option
-        var removeButton = document.createElement("button");
+        let removeButton = document.createElement("button");
         removeButton.textContent = "Remove";
         removeButton.onclick = function() { removeOption(optionNumber); };
 
-        // append the new label, input box and remove button to the option container
+        // append input box and remove button to flex div
+        flexOption.appendChild(newInput);
+        flexOption.appendChild(removeButton);
+
+        // append the new label and flex div to container
         optionContainer.appendChild(newLabel);
-        optionContainer.appendChild(newInput);
-        optionContainer.appendChild(removeButton);
+        optionContainer.appendChild(flexOption);
 
         // append the container div to the extraOptionsDiv
         extraOptionsDiv.appendChild(optionContainer);
@@ -118,9 +126,12 @@ function addOption() {
     optionCount++;
 }
 
-// Clears HTML form
+// Clears HTML form and removes additional options
 function clearForm(){
     document.getElementById("pollForm").reset();
+    while (optionCount >= 3){
+        removeOption(optionCount);
+    }
 }
 
 // Begins a new poll
@@ -135,8 +146,8 @@ function startPoll(){
     var options = [];
 
     // Push non-empty options into the options array
-    for (var i = 1; i <= 9; i++) {
-        var option = form.elements["Option" + i] ? form.elements["Option" + i].value.trim() : "";
+    for (let i = 1; i <= 9; i++) {
+        let option = form.elements["Option" + i] ? form.elements["Option" + i].value.trim() : "";
         if (option !== "") {
             options.push(option);
         }

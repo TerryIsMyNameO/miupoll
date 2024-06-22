@@ -1,0 +1,79 @@
+body {
+  background-color: #222;
+  color: white;
+  font-family: Arial, sans-serif;
+  padding: 1em;
+}
+
+#wrapper {
+  width: 400px;
+  max-width: 100%;
+}
+
+form {
+  margin-bottom: .5em;
+}
+
+label {
+  display: block;
+  margin-bottom: .25em;
+}
+
+input {
+  background-color: #333;
+  color: white;
+  border: 1px solid #777;
+  border-radius: 3px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #555;
+  color: white;
+  display: inline-block;
+  border: 1px solid #888;
+  border-radius: 3px;
+  margin: .25em;
+  cursor: pointer;
+}
+
+input, button {
+  padding: .75em;
+}
+
+.optionContainer, #titleContainer, #error-message {
+  margin-bottom: 1em;
+}
+
+.flexOption {
+  display: flex;
+}
+
+.flexOption input {
+  margin-right:1em;
+}
+
+.flexOption button {
+  height: 100%;
+  margin: 0;
+}
+
+#startButton {
+  background-color: green;
+  border-color: darkgreen;
+}
+
+#endButton {
+  background-color: red;
+  border-color: darkred;
+}
+
+#hideButton {
+  background-color: dodgerblue;
+  border-color: royalblue;
+}
+
+.required, #error-message {
+  color: red;
+}

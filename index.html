@@ -6,7 +6,7 @@
 </head>
 <body>
   <div id="wrapper">
-    <form id="pollForm">
+    <form id="pollForm" onsubmit="startPoll(); return false;">
       <div id="titleContainer">
           <textarea id="Title" name="Title" placeholder="Poll Title (Required)" required></textarea>
       </div>
@@ -19,15 +19,14 @@
       <div id="extraOptions">
         <!-- Additional options will be added here -->
       </div>
-      <div id="error-message" style="display: none;">Please fill in all required fields.</div>
       <div class="buttonGroup">
         <button type="button" id="addOptionBtn" onclick="addOption()">+ Option</button>
         <button type="button" onclick="clearForm()">Clear All</button>
       </div>
       <div class="buttonGroup">
-        <button id="startButton" onclick="startPoll()">Start Poll</button>
-        <button id="endButton" onclick="endPoll()">End Poll</button>
-        <button id="hideButton" onclick="hideOverlay()">Hide Overlay</button>
+        <button id="startButton" type="submit">Start Poll</button>
+        <button id="endButton" type="button" onclick="endPoll()">End Poll</button>
+        <button id="hideButton" type="button" onclick="hideOverlay()">Hide Overlay</button>
       </div>
     </form>
   </div>

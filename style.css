@@ -13,11 +13,6 @@ body {
   max-width: 100%;
 }
 
-label {
-  display: block;
-  margin-bottom: .25em;
-}
-
 input, textarea {
   background-color: #333;
   color: white;
@@ -41,11 +36,15 @@ button {
   cursor: pointer;
 }
 
+button:active {
+  background-color: #444;
+}
+
 input, textarea, button {
   padding: .75em;
 }
 
-.optionContainer, #titleContainer, #error-message {
+.optionContainer, #titleContainer {
   margin-bottom: 1em;
 }
 
@@ -77,16 +76,23 @@ input, textarea, button {
   border-color: darkgreen;
 }
 
+#startButton:active {
+  background-color: darkgreen;
+}
+
 #endButton {
   background-color: red;
   border-color: darkred;
+}
+
+#endButton:active {
+  background-color: darkred;
 }
 
 #hideButton {
   background-color: dodgerblue;
   border-color: royalblue;
 }
-
-.required, #error-message {
-  color: red;
+#hideButton:active {
+  background-color: royalblue;
 }

@@ -1,17 +1,20 @@
 const webhookUrl = getUrlParameter('webhook'); // Get webhook URL from query parameter
 var optionCount = 2; // initialize number of options
 
+// Function to get parameter from url by name
 function getUrlParameter(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
 } // Get parameters from URL
 
-// Check that the webhook parameter has been included
+// Function to check that the webhook parameter has been included
 function checkWebhook(){
     if (!webhookUrl) {
         console.error("Webhook URL is missing.");
-        return;
-    } // Error if no webhook was included in the URL
+        return false;
+    } else {
+        return true;
+    }
 }
 
 // Send JSON data to bot
@@ -29,7 +32,7 @@ function sendData(jsonData){
 // Function to remove an extra option that has been added
 function removeOption(optionNumber){
     // select the specified option container
-    var optionContainerToRemove = document.getElementById("optionContainer" + optionNumber);
+    const optionContainerToRemove = document.getElementById("optionContainer" + optionNumber);
 
     // remove the container
     if (optionContainerToRemove) {
@@ -47,17 +50,17 @@ function removeOption(optionNumber){
 
         // Update IDs and data-option attributes of remaining options
         for (let i = optionNumber + 1; i <= optionCount + 1; i++) {
-            var optionContainer = document.getElementById("optionContainer" + i);
+            const optionContainer = document.getElementById("optionContainer" + i);
             if (optionContainer) {
                 optionContainer.setAttribute("id", "optionContainer" + (i - 1));
 
-                var input = optionContainer.querySelector("input[type='text']");
+                const input = optionContainer.querySelector("input[type='text']");
                 if (input) {
                     input.setAttribute("id", "Option" + (i - 1));
                     input.setAttribute("name", "Option" + (i - 1));
                 }
 
-                var removeButton = optionContainer.querySelector("button");
+                const removeButton = optionContainer.querySelector("button");
                 if (removeButton) {
                     removeButton.setAttribute("data-option", (i - 1));
                 }
@@ -66,9 +69,10 @@ function removeOption(optionNumber){
     }
 }
 
+
 // Function to add more option fields dynamically
 function addOption() {
-    var extraOptionsDiv = document.getElementById("extraOptions");
+    const extraOptionsDiv = document.getElementById("extraOptions");
 
     if (optionCount < 9) { // Maximum 10 options
         let optionNumber = optionCount + 1; // Calculate the next option number
@@ -101,13 +105,12 @@ function addOption() {
         if (optionCount === 8) {
             addOptionBtn.disabled = true;
             addOptionBtn.style.backgroundColor = "gray"; // gray out the button
-            addOptionBtn.style.cursor = "not-allowed"; // remove pointer cursor
+            addOptionBtn.style.cursor = "not-allowed"; // replace pointer cursor
         }
 
     } else {
-        // Show an alert saying the maximum options has been reached
-        // This should never show because the button should be disabled
-        alert("You can add a maximum of 10 options.");
+        // This should never happen because the button should be disabled automatically
+        console.log("You can add a maximum of 10 options.");
     }
 
     // update option count
@@ -124,14 +127,16 @@ function clearForm(){
 
 // Begins a new poll
 function startPoll(){
-    checkWebhook();
+    if (!checkWebhook()){
+        return; // Stop function if no webhook
+    };
 
     // Access the form element
-    var form = document.getElementById("pollForm");
+    const form = document.getElementById("pollForm");
 
     // Get poll options from form
-    var title = form.elements["Title"].value;
-    var options = [];
+    const title = form.elements["Title"].value;
+    const options = [];
 
     // Push non-empty options into the options array
     for (let i = 1; i <= 9; i++) {
@@ -143,17 +148,12 @@ function startPoll(){
 
     // Check if required fields are filled
     if (title === "" || options.length < 2) {
-        // Display error message
-        var errorMessage = document.getElementById("error-message");
-        errorMessage.style.display = "block";
+        console.error("Required feilds must be filled out.");
         return; // Stop function execution if required fields are not filled
-    } else {
-        var errorMessage = document.getElementById("error-message");
-        errorMessage.style.display = "none";
     }
 
     // Format poll options as JSON
-    var jsonData = {
+    const jsonData = {
         title: title || '',
         numPollOptions: options.length,
         option1: options[0] || '',
@@ -172,18 +172,22 @@ function startPoll(){
 }
 
 function endPoll(){
-     checkWebhook();
+    if (!checkWebhook()){
+        return; // Stop function if no webhook
+    };
 
-    var jsonData = { endPoll: true, };
+    const jsonData = { endPoll: true, };
 
     // Send data to bot
     sendData(jsonData);
 }
 
 function hideOverlay(){
-    checkWebhook();
+    if (!checkWebhook()){
+        return; // Stop function if no webhook
+    };
 
-    var jsonData = { hidePoll: true, };
+    const jsonData = { hidePoll: true, };
 
     // Send data to bot
     sendData(jsonData);

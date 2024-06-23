@@ -24,9 +24,13 @@ function sendData(jsonData){
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(jsonData),
     })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error)); // Error handling for the fetch request
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('There was an issue with the response from the server.');
+        }
+        return;
+    })
+    .catch(error => console.error('Error sending data:', error)); // Error handling for the fetch request
 }
 
 // Function to remove an extra option that has been added
